@@ -2,36 +2,33 @@
 
 namespace App\Models;
 
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-class Post
+class Post extends Model
 {
-    // use HasFactory;
+    use HasFactory;
 
-    private static $blog_posts = [
-        [
-            "divisi" => "Data Entry",
-            "slug" => "data-entry",
-            "body" => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum natus pariatur totam ex. Recusandae dolorum tempore, fugit perferendis mollitia earum esse necessitatibus alias debitis beatae deserunt, nulla natus quae, nemo praesentium dignissimos in commodi ducimus accusantium ut temporibus consectetur repellendus soluta! Qui, vitae exercitationem sequi consectetur quia tenetur. Delectus, laboriosam."
-        ]
-    ];
+    // protected $fillable = ['divisi', 'excerpt', 'body'];
+    protected $guarded = ['id'];
 
-    public static function all()
+    public function category()
     {
-        return self::$blog_posts;
+        return $this->belongsTo(Category::class);
     }
 
-    public static function find($slug)
+    public function scopeFilter($query, array $filters)
     {
-        $posts = self::$blog_posts;
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            return $query->where('divisi', 'like', '%' . $search . '%')
+                ->orWhere('body', 'like', '%' . $search . '%');
+        });
 
-        $post = [];
-        foreach ($posts as $p) {
-            if ($p["slug"] === $slug) {
-                $post = $p;
-            }
-        }
-
-        return $post;
+        $query->when($filter['category'] ?? false, function ($query, $category) {
+            return $query->whereHas('category', function ($query) use ($category) {
+                $query->where('slug', $category);
+            });
+        });
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use Illuminate\Routing\Controller;
 
 class RegisterController extends Controller
 {
@@ -25,6 +26,10 @@ class RegisterController extends Controller
             'password' => 'required|min:5|max:255'
         ]);
 
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
         User::create($validatedData);
+        // $request->session()->flash('success', 'Pendaftaran Behasil! Silahkan Login');
+        return redirect('/login')->with('success', 'Pendaftaran Behasil! Silahkan Login');
     }
 }

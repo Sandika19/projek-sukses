@@ -10,16 +10,17 @@ class PostController extends Controller
     public function index()
     {
         return view('posts', [
-            "divisi" => "Posts",
-            "posts" => Post::all()
+            "title" => "Lowongan Magang",
+            // "posts" => Post::all()
+            "posts" => Post::latest()->filter(request(['search', 'category']))->paginate(3)->withQueryString()
         ]);
     }
 
-    public function show($slug)
+    public function show(Post $post)
     {
         return view('post', [
-            "divisi" => "Single Post",
-            "post" => Post::find($slug)
+            "title" => "Single Post",
+            "post" => $post
         ]);
     }
 }
