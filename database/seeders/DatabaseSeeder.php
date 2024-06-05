@@ -17,17 +17,45 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Post::factory(5)->create();
+        // Post::factory(5)->create();
 
-        Category::create([
-            'name' => 'Software',
-            'slug' => 'software'
-        ]);
+        // Category::create([
+        //     'name' => 'Software',
+        //     'slug' => 'software'
+        // ]);
 
-        Category::create([
-            'name' => 'Jaringan',
-            'slug' => 'jaringan'
-        ]);
+        // Category::create([
+        //     'name' => 'Jaringan',
+        //     'slug' => 'jaringan'
+        // ]);
+
+        $userData = [
+            [
+                'name' => 'admin',
+                'username' => 'admin1',
+                'email' => 'admin@admin.com',
+                'role' => 'admin',
+                'password' => bcrypt('admin123')
+            ],
+            [
+                'name' => 'adminbiroprek',
+                'username' => 'admin2',
+                'email' => 'admin@biroprek.com',
+                'role' => 'biroprek',
+                'password' => bcrypt('biroprek123')
+            ],
+            [
+                'name' => 'usersatu',
+                'username' => 'user1',
+                'email' => 'user@gmail.com',
+                'role' => 'user',
+                'password' => bcrypt('user123')
+            ]
+        ];
+
+        foreach ($userData as $key => $val) {
+            User::create($val);
+        }
 
 
 
